@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS B2 → C1 Interactive Manual</title>
+<style>
+:root {
+  --bg: #0e1117;
+  --bg-elev: #161b22;
+  --bg-soft: #1c2230;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --accent: #7c9eff;
+  --accent-2: #a78bfa;
+  --good: #3fb950;
+  --bad: #f85149;
+  --border: #30363d;
+  --shadow: 0 8px 32px rgba(0,0,0,.4);
+  --radius: 12px;
+  --trans: .35s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="light"] {
+  --bg: #f7f9fc;
+  --bg-elev: #ffffff;
+  --bg-soft: #eef2f8;
+  --text: #1a1f2c;
+  --text-dim: #5a6578;
+  --accent: #3b5bdb;
+  --accent-2: #7048e8;
+  --good: #2b8a3e;
+  --bad: #c92a2a;
+  --border: #dde3ec;
+  --shadow: 0 8px 32px rgba(20,30,60,.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  transition: background var(--trans), color var(--trans);
+  font-size: 16px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+  background: var(--bg-elev);
+  border-right: 1px solid var(--border);
+  padding: 28px 22px;
+  overflow-y: auto;
+  z-index: 100;
+  transition: background var(--trans), border-color var(--trans);
+}
+.sidebar h1 {
+  font-size: 1.15rem;
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sidebar .subtitle {
+  color: var(--text-dim);
+  font-size: .78rem;
+  margin-bottom: 26px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.nav-list { list-style: none; }
+.nav-list li {
+  margin-bottom: 4px;
+}
+.nav-list a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: .9rem;
+  transition: all var(--trans);
+  border-left: 2px solid transparent;
+}
+.nav-list a:hover { background: var(--bg-soft); color: var(--text); }
+.nav-list a.active {
+  background: var(--bg-soft);
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+.nav-list a .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border);
+  transition: background var(--trans);
+}
+.nav-list a.visited .dot { background: var(--accent-2); }
+.nav-list a.completed .dot { background: var(--good); }
+
+.theme-toggle {
+  margin-top: 24px;
+  padding: 10px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: .85rem;
+  transition: all var(--trans);
+}
+.theme-toggle:hover { border-color: var(--accent); }
+
+/* Main */
+.main {
+  margin-left: 280px;
+  padding: 60px 72px 120px;
+  max-width: 1100px;
+}
+section.module {
+  margin-bottom: 90px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+section.module.in-view { opacity: 1; transform: translateY(0); }
+.module-tag {
+  display: inline-block;
+  font-size: .72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 4px 12px;
+  background: var(--bg-soft);
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  letter-spacing: -.5px;
+}
+h3 {
+  font-size: 1.35rem;
+  margin: 36px 0 14px;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+}
+h4 { font-size: 1.05rem; margin: 22px 0 8px; color: var(--accent-2); }
+p { margin-bottom: 14px; color: var(--text); }
+.lead { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 20px; }
+
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 30px;
+  margin: 18px 0;
+  box-shadow: var(--shadow);
+  transition: all var(--trans);
+}
+.card:hover { border-color: var(--accent); }
+
+/* Collapsible */
+.collapsible {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.collapsible-header {
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-weight: 600;
+  user-select: none;
+  transition: background var(--trans);
+}
+.collapsible-header:hover { background: var(--bg-elev); }
+.collapsible-header .chev { transition: transform var(--trans); color: var(--accent); }
+.collapsible.open .chev { transform: rotate(90deg); }
+.collapsible-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .5s ease, padding .3s ease;
+  padding: 0 20px;
+}
+.collapsible.open .collapsible-body {
+  max-height: 2000px;
+  padding: 10px 20px 20px;
+}
+
+/* Tooltip */
+.tip {
+  border-bottom: 1px dashed var(--accent);
+  cursor: help;
+  position: relative;
+}
+.tip:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: 130%; left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elev);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: .82rem;
+  white-space: normal; width: 240px;
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow);
+  z-index: 10;
+  font-weight: normal;
+}
+
+/* Exercises */
+.exercise {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent-2);
+  padding: 18px 22px;
+  border-radius: 0 10px 10px 0;
+  margin: 14px 0;
+}
+.exercise .q { font-weight: 600; margin-bottom: 10px; }
+.exercise input[type=text] {
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: .95rem;
+  width: 60%;
+  max-width: 420px;
+}
+.exercise input[type=text]:focus { outline: none; border-color: var(--accent); }
+.exercise button, .btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: .85rem;
+  margin-left: 8px;
+  transition: transform var(--trans), box-shadow var(--trans);
+}
+.exercise button:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(124,158,255,.3); }
+.feedback { margin-top: 10px; font-size: .9rem; min-height: 1.2em; }
+.feedback.good { color: var(--good); }
+.feedback.bad { color: var(--bad); }
+
+.mc-opt {
+  display: block;
+  background: var(--bg);
+  padding: 10px 16px;
+  margin: 6px 0;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--trans);
+}
+.mc-opt:hover { border-color: var(--accent); }
+.mc-opt.correct { background: rgba(63,185,80,.15); border-color: var(--good); }
+.mc-opt.wrong { background: rgba(248,81,73,.15); border-color: var(--bad); }
+
+/* Diagrams */
+.diagram {
+  background: var(--bg-soft);
+  border-radius: 10px;
+  padding: 22px;
+  margin: 18px 0;
+  border: 1px solid var(--border);
+}
+.timeline {
+  display: flex; align-items: center; position: relative;
+  padding: 30px 10px;
+}
+.timeline::before {
+  content: ''; position: absolute;
+  top: 50%; left: 0; right: 0; height: 2px;
+  background: var(--border);
+}
+.timeline .t-point {
+  flex: 1; text-align: center; position: relative;
+  font-size: .82rem; color: var(--text-dim);
+}
+.timeline .t-point::before {
+  content: ''; display: block;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent);
+  margin: 0 auto 10px; position: relative; z-index: 1;
+  box-shadow: 0 0 0 4px var(--bg-soft);
+}
+.timeline .t-point.now::before { background: var(--accent-2); transform: scale(1.3); }
+.timeline .t-point strong { display: block; color: var(--text); margin-top: 6px; }
+
+table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: .92rem;
+}
+table.compare th, table.compare td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+table.compare th {
+  background: var(--bg-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+table.compare tr:hover td { background: var(--bg-soft); }
+
+.chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .78rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  margin: 3px;
+}
+.chip.b2 { color: var(--bad); border-color: var(--bad); }
+.chip.c1 { color: var(--good); border-color: var(--good); }
+
+.highlight-s { color: #7c9eff; font-weight: 600; }
+.highlight-v { color: #f0a670; font-weight: 600; }
+.highlight-o { color: #a78bfa; font-weight: 600; }
+.highlight-adv { color: #3fb950; font-weight: 600; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: 10px 14px 10px 42px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background var(--trans);
+}
+.checklist li:hover { background: var(--bg-soft); }
+.checklist li::before {
+  content: ''; position: absolute;
+  left: 14px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  transition: all var(--trans);
+}
+.checklist li.done::before {
+  background: var(--good); border-color: var(--good);
+}
+.checklist li.done::after {
+  content: '✓'; color: white; position: absolute;
+  left: 18px; top: 50%; transform: translateY(-55%);
+  font-size: .85rem; font-weight: bold;
+}
+.checklist li.done { color: var(--text-dim); text-decoration: line-through; }
+
+.score-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--bg-soft);
+  border-radius: 20px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: .85rem;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+/* Flow diagram */
+.flow {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.flow .step {
+  flex: 1; min-width: 140px;
+  background: var(--bg-elev);
+  padding: 14px;
+  border-radius: 8px;
+  border-top: 3px solid var(--accent);
+  text-align: center;
+  font-size: .85rem;
+  position: relative;
+  transition: transform var(--trans);
+}
+.flow .step:hover { transform: translateY(-3px); }
+.flow .step strong { display: block; color: var(--accent); margin-bottom: 4px; font-size: .9rem; }
+.flow .arrow { color: var(--text-dim); font-size: 1.4rem; }
+
+/* Progress bar */
+.progress-bar {
+  position: fixed; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  z-index: 200;
+  transition: width .1s linear;
+  box-shadow: 0 -2px 8px rgba(124,158,255,.4);
+}
+
+.band-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  background: var(--bg-soft);
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 10px 0;
+  align-items: center;
+}
+.band-card .band {
+  font-size: 1.8rem; font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  background: var(--bg);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+code.inline {
+  background: var(--bg-soft);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: .88em;
+  color: var(--accent-2);
+  font-family: "SF Mono", Consolas, monospace;
+}
+
+@media (max-width: 900px) {
+  .sidebar { width: 100%; height: auto; position: relative; }
+  .main { margin-left: 0; padding: 40px 24px 120px; }
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<aside class="sidebar">
+  <h1>IELTS Mastery</h1>
+  <div class="subtitle">B2 → C1 Manual</div>
+  <ul class="nav-list" id="navList">
+    <li><a href="#overview"><span>01 · Overview</span><span class="dot"></span></a></li>
+    <li><a href="#grammar"><span>02 · Advanced Grammar</span><span class="dot"></span></a></li>
+    <li><a href="#vocab"><span>03 · Vocabulary</span><span class="dot"></span></a></li>
+    <li><a href="#writing"><span>04 · Writing</span><span class="dot"></span></a></li>
+    <li><a href="#reading"><span>05 · Reading</span><span class="dot"></span></a></li>
+    <li><a href="#speaking"><span>06 · Speaking</span><span class="dot"></span></a></li>
+    <li><a href="#capstone"><span>07 · Final C1 Challenge</span><span class="dot"></span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle">☀ Switch to Light Mode</button>
+  <div style="margin-top:20px; font-size:.75rem; color:var(--text-dim);">
+    Score: <span class="score-badge" id="totalScore">0 pts</span>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- OVERVIEW -->
+<section class="module" id="overview">
+  <span class="module-tag">Module 01</span>
+  <h2>Overview & Roadmap</h2>
+  <p class="lead">Understand precisely what separates a B2 learner from a C1 candidate — and map out the path between them.</p>
+
+  <div class="card">
+    <h3>The B2 → C1 Gap</h3>
+    <p>At <strong>B2</strong>, you can communicate with reasonable fluency on familiar topics. At <strong>C1</strong>, you handle complex, abstract arguments with precision, subtlety, and a naturally varied range of language. The gap is not about knowing <em>more</em> words — it is about using language with greater <span class="tip" data-tip="Accuracy, range, and appropriateness across registers.">control</span>.</p>
+
+    <table class="compare">
+      <thead><tr><th>Dimension</th><th>B2 (IELTS 5.5–6.5)</th><th>C1 (IELTS 7.0–8.0)</th></tr></thead>
+      <tbody>
+        <tr><td>Grammar</td><td>Mostly accurate simple & compound sentences</td><td>Wide range of complex structures with flexibility</td></tr>
+        <tr><td>Vocabulary</td><td>Everyday + some topic words</td><td>Precise, idiomatic, register-aware</td></tr>
+        <tr><td>Cohesion</td><td>Basic linkers (and, but, however)</td><td>Subtle discourse markers & referencing</td></tr>
+        <tr><td>Fluency</td><td>Some hesitation, rephrasing</td><td>Smooth, spontaneous, nuanced</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>IELTS Band Descriptor Snapshot</h3>
+  <div class="band-card"><div class="band">6.5</div><div><strong>Competent user.</strong> Generally effective command despite some inaccuracies. Can handle complex language, particularly in familiar situations.</div></div>
+  <div class="band-card"><div class="band">7.0</div><div><strong>Good user.</strong> Operational command with occasional inaccuracies. Handles complex language well and understands detailed reasoning.</div></div>
+  <div class="band-card"><div class="band">8.0</div><div><strong>Very good user.</strong> Fully operational command with only occasional unsystematic inaccuracies. Handles complex detailed argumentation well.</div></div>
+
+  <h3>Your Roadmap</h3>
+  <div class="diagram">
+    <div class="flow">
+      <div class="step"><strong>1</strong>Grammar Range</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>2</strong>Lexical Precision</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>3</strong>Skills Integration</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>4</strong>Strategic Fluency</div>
+    </div>
+  </div>
+
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="overview">
+    <li>I can describe the key differences between B2 and C1</li>
+    <li>I know the band descriptors for 6.5 through 8.0</li>
+    <li>I understand what each module in this manual will cover</li>
+  </ul>
+</section>
+
+<!-- GRAMMAR -->
+<section class="module" id="grammar">
+  <span class="module-tag">Module 02</span>
+  <h2>Advanced Grammar</h2>
+  <p class="lead">Grammatical range is the single fastest way to lift a score from 6.5 to 7.5. Focus on control, not complexity for its own sake.</p>
+
+  <div class="card">
+    <h3>1. Mixed Conditionals</h3>
+    <p>Mixed conditionals combine different time frames — typically a past condition with a present consequence, or vice versa. They are powerful for hypothetical reasoning in Writing Task 2 and Speaking Part 3.</p>
+
+    <div class="diagram">
+      <div class="timeline">
+        <div class="t-point"><strong>Past condition</strong>if + had + V3</div>
+        <div class="t-point now"><strong>Present result</strong>would + V</div>
+        <div class="t-point"><strong>Future effect</strong>would be V-ing</div>
+      </div>
+    </div>
+
+    <h4>Example</h4>
+    <p><em>"If governments <span class="highlight-v">had invested</span> in renewable energy earlier, we <span class="highlight-v">would not be facing</span> such severe climate consequences today."</em></p>
+
+    <div class="collapsible">
+      <div class="collapsible-header">Why this scores higher <span class="chev">▶</span></div>
+      <div class="collapsible-body">
+        <p>This sentence demonstrates a mixed third-to-second conditional, precise lexical choice (<code class="inline">severe consequences</code>), and clear cause–effect reasoning — markers of band 7+.</p>
+      </div>
+    </div>
+
+    <div class="exercise" data-ex="g1">
+      <div class="q">Exercise 1 — Fill the blank: <em>If she ____ (study) medicine, she would be working in a hospital now.</em></div>
+      <input type="text" placeholder="type answer"><button onclick="checkText(this,['had studied'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise" data-ex="g2">
+      <div class="q">Exercise 2 — Transform: <em>"He didn't save money, so he can't travel now."</em> → Conditional form:</div>
+      <input type="text" placeholder="If he..."><button onclick="checkText(this,['if he had saved money, he could travel now','if he had saved money he could travel now','if he had saved money, he would be able to travel now'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>2. Inversion for Emphasis</h3>
+    <p>Inversion places an adverbial at the front of a sentence and reverses subject–verb order. It is highly characteristic of C1 writing and speaking.</p>
+
+    <div class="diagram">
+      <p style="margin-bottom:10px;"><strong>Standard:</strong> <span class="highlight-s">I</span> <span class="highlight-v">have</span> <span class="highlight-adv">rarely</span> seen such dedication.</p>
+      <p><strong>Inverted:</strong> <span class="highlight-adv">Rarely</span> <span class="highlight-v">have</span> <span class="highlight-s">I</span> seen such dedication.</p>
+    </div>
+
+    <h4>Common triggers</h4>
+    <p><code class="inline">Rarely</code> · <code class="inline">Seldom</code> · <code class="inline">Not only</code> · <code class="inline">Never before</code> · <code class="inline">Under no circumstances</code> · <code class="inline">Only by</code> · <code class="inline">Hardly had</code></p>
+
+    <div class="exercise" data-ex="g3">
+      <div class="q">Multiple choice — Which sentence uses inversion correctly?</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">Not only she speaks English, but also French.</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">Not only does she speak English, but also French.</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">Not only speaks she English, but also French.</div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise" data-ex="g4">
+      <div class="q">Error correction — Rewrite correctly: <em>"Hardly I had finished the test when the bell rang."</em></div>
+      <input type="text"><button onclick="checkText(this,['hardly had i finished the test when the bell rang'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>3. Advanced Passive Structures</h3>
+    <p>Passive voice is essential for academic and formal registers. C1 users go beyond <code class="inline">be + V3</code> to use <em>passive infinitives</em>, <em>passive reporting structures</em>, and <em>causatives</em>.</p>
+
+    <table class="compare">
+      <thead><tr><th>Structure</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Reporting passive</td><td><em>It is widely believed that climate change is accelerating.</em></td></tr>
+        <tr><td>Subject passive</td><td><em>Climate change is believed to be accelerating.</em></td></tr>
+        <tr><td>Causative</td><td><em>The committee had the results verified independently.</em></td></tr>
+      </tbody>
+    </table>
+
+    <div class="exercise" data-ex="g5">
+      <div class="q">Transform to passive: <em>"Experts estimate that the project will cost $2 million."</em></div>
+      <input type="text" placeholder="It is..."><button onclick="checkText(this,['it is estimated that the project will cost $2 million','it is estimated that the project will cost 2 million','the project is estimated to cost $2 million'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <h3>Capstone — Grammar Integration</h3>
+  <div class="exercise" data-ex="gcap">
+    <div class="q">Rewrite using inversion and a mixed conditional: <em>"I have never regretted a decision more. If I had accepted the offer, I would be in London now."</em></div>
+    <input type="text" placeholder="Never..."><button onclick="checkText(this,['never have i regretted a decision more. had i accepted the offer, i would be in london now','never have i regretted a decision more; had i accepted the offer, i would be in london now'])">Check</button>
+    <div class="feedback"></div>
+  </div>
+
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="grammar">
+    <li>I can form and use mixed conditionals accurately</li>
+    <li>I can apply inversion with negative adverbials</li>
+    <li>I can use advanced passive reporting structures</li>
+    <li>I can identify and correct common B2 grammar errors</li>
+  </ul>
+</section>
+
+<!-- VOCAB -->
+<section class="module" id="vocab">
+  <span class="module-tag">Module 03</span>
+  <h2>Vocabulary & Collocation</h2>
+  <p class="lead">A C1 speaker is not someone who knows rare words — it is someone who uses common words with uncommon precision.</p>
+
+  <div class="card">
+    <h3>The Register Ladder</h3>
+    <p>Register refers to the level of formality. IELTS examiners reward <strong>appropriate</strong> register, not the most formal one. Compare how a single idea can be expressed across registers:</p>
+
+    <table class="compare">
+      <thead><tr><th>Register</th><th>Example (meaning: <em>very important</em>)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip b2">Informal</span></td><td>a big deal</td></tr>
+        <tr><td><span class="chip">Neutral</span></td><td>very important</td></tr>
+        <tr><td><span class="chip c1">Academic</span></td><td>of paramount significance</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Precision Upgrades (B2 → C1)</h3>
+    <table class="compare">
+      <thead><tr><th>B2 word</th><th>C1 upgrade</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>big problem</td><td>pressing issue</td><td><em>Urban congestion is a pressing issue.</em></td></tr>
+        <tr><td>a lot of</td><td>a substantial amount of</td><td><em>A substantial amount of research supports this.</em></td></tr>
+        <tr><td>good</td><td>compelling / sound</td><td><em>She presented a compelling argument.</em></td></tr>
+        <tr><td>bad effect</td><td>adverse impact</td><td><em>The policy had an adverse impact on wages.</em></td></tr>
+        <tr><td>because of</td><td>owing to / as a result of</td><td><em>Owing to rising costs, spending fell.</em></td></tr>
+      </tbody>
+    </table>
+
+    <div class="exercise" data-ex="v1">
+      <div class="q">Upgrade the sentence: <em>"There are a lot of big problems in the education system."</em></div>
+      <input type="text"><button onclick="checkText(this,['there are a substantial amount of pressing issues in the education system','there are numerous pressing issues in the education system','the education system faces a substantial amount of pressing issues'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Collocations That Score</h3>
+    <p>Collocations are word partnerships that sound natural to native speakers. Using them signals lexical control.</p>
+
+    <div class="diagram">
+      <h4 style="margin-top:0;">Strong verb + noun pairs</h4>
+      <p><span class="chip c1">draw a conclusion</span><span class="chip c1">raise awareness</span><span class="chip c1">pose a threat</span><span class="chip c1">meet a deadline</span><span class="chip c1">reach consensus</span><span class="chip c1">shed light on</span></p>
+      <h4>Strong adjective + noun pairs</h4>
+      <p><span class="chip c1">pressing concern</span><span class="chip c1">profound impact</span><span class="chip c1">stark contrast</span><span class="chip c1">viable alternative</span><span class="chip c1">unprecedented growth</span></p>
+    </div>
+
+    <div class="exercise" data-ex="v2">
+      <div class="q">Which verb collocates best with <em>"attention"</em>?</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">make</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">draw</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">do</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">put</div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise" data-ex="v3">
+      <div class="q">Fill the blank with a collocation: <em>"The new regulations ____ a serious threat to small businesses."</em></div>
+      <input type="text"><button onclick="checkText(this,['pose'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <h3>Capstone — Lexical Rewrite</h3>
+  <div class="exercise" data-ex="vcap">
+    <div class="q">Rewrite at C1 level: <em>"Lots of people think that social media is bad for kids because it gives them wrong ideas."</em></div>
+    <input type="text"><button onclick="checkText(this,['it is widely believed that social media has an adverse impact on children as it exposes them to misleading ideas','many argue that social media poses a significant threat to children by exposing them to distorted perceptions'])">Check (accepts several forms)</button>
+    <div class="feedback"></div>
+  </div>
+
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="vocab">
+    <li>I can identify register and adjust accordingly</li>
+    <li>I use precise collocations rather than generic words</li>
+    <li>I can upgrade simple expressions to academic equivalents</li>
+  </ul>
+</section>
+
+<!-- WRITING -->
+<section class="module" id="writing">
+  <span class="module-tag">Module 04</span>
+  <h2>IELTS Writing — Task 1 & Task 2</h2>
+  <p class="lead">Writing is assessed on four equally weighted criteria. Mastering structure and cohesion is the shortest path from 6.5 to 7.5.</p>
+
+  <div class="card">
+    <h3>The Four Criteria</h3>
+    <div class="flow">
+      <div class="step"><strong>TR</strong>Task Response</div>
+      <div class="step"><strong>CC</strong>Cohesion & Coherence</div>
+      <div class="step"><strong>LR</strong>Lexical Resource</div>
+      <div class="step"><strong>GRA</strong>Grammar Range & Accuracy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Task 2 Essay Architecture</h3>
+    <div class="diagram">
+      <div class="flow">
+        <div class="step"><strong>Intro</strong>Paraphrase + Thesis</div>
+        <div class="arrow">↓</div>
+        <div class="step"><strong>Body 1</strong>Claim → Explain → Example</div>
+        <div class="arrow">↓</div>
+        <div class="step"><strong>Body 2</strong>Counter / Second view</div>
+        <div class="arrow">↓</div>
+        <div class="step"><strong>Conclusion</strong>Restate + Implication</div>
+      </div>
+    </div>
+
+    <h4>Annotated sample opening (Band 7.5)</h4>
+    <p style="background:var(--bg-soft);padding:14px;border-radius:8px;">
+      <span class="highlight-adv">It is often argued that</span> the widespread use of technology in classrooms has transformed modern education. <span class="highlight-v">While this shift has undeniably brought benefits</span>, I would contend that <span class="highlight-o">its drawbacks merit equally serious consideration</span>.
+    </p>
+    <p style="font-size:.85rem;color:var(--text-dim);">Notice: hedged opening, balanced thesis, formal register, no personal pronoun "I think".</p>
+  </div>
+
+  <div class="card">
+    <h3>Cohesive Devices Toolkit</h3>
+    <table class="compare">
+      <thead><tr><th>Function</th><th>B2</th><th>C1 alternative</th></tr></thead>
+      <tbody>
+        <tr><td>Adding</td><td>also, and</td><td>moreover, furthermore, in addition to this</td></tr>
+        <tr><td>Contrasting</td><td>but, however</td><td>nevertheless, conversely, that said</td></tr>
+        <tr><td>Cause</td><td>because</td><td>owing to, given that, insofar as</td></tr>
+        <tr><td>Example</td><td>for example</td><td>a case in point, to illustrate</td></tr>
+        <tr><td>Conclusion</td><td>in conclusion</td><td>on balance, all things considered</td></tr>
+      </tbody>
+    </table>
+
+    <div class="exercise" data-ex="w1">
+      <div class="q">Choose the most academic linker: <em>"____ the rising costs, demand continued to grow."</em></div>
+      <div class="mc-opt" onclick="checkMC(this,false)">But</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">Despite</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">Because of</div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise" data-ex="w2">
+      <div class="q">Replace "also" with a C1 alternative: <em>"Also, governments should invest in public transport."</em></div>
+      <input type="text"><button onclick="checkText(this,['moreover, governments should invest in public transport','furthermore, governments should invest in public transport','in addition, governments should invest in public transport'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Task 1 — Describing Trends (Academic)</h3>
+    <div class="diagram">
+      <svg viewBox="0 0 400 180" width="100%" height="180">
+        <line x1="40" y1="20" x2="40" y2="150" stroke="currentColor" stroke-opacity=".4"/>
+        <line x1="40" y1="150" x2="380" y2="150" stroke="currentColor" stroke-opacity=".4"/>
+        <polyline points="40,130 100,110 160,80 220,90 280,50 340,30" fill="none" stroke="#7c9eff" stroke-width="3"/>
+        <circle cx="40" cy="130" r="4" fill="#7c9eff"/>
+        <circle cx="100" cy="110" r="4" fill="#7c9eff"/>
+        <circle cx="160" cy="80" r="4" fill="#7c9eff"/>
+        <circle cx="220" cy="90" r="4" fill="#a78bfa"/>
+        <circle cx="280" cy="50" r="4" fill="#7c9eff"/>
+        <circle cx="340" cy="30" r="4" fill="#7c9eff"/>
+        <text x="40" y="170" font-size="10" fill="currentColor">2000</text>
+        <text x="330" y="170" font-size="10" fill="currentColor">2025</text>
+        <text x="210" y="108" font-size="10" fill="#a78bfa">dip</text>
+      </svg>
+      <p style="margin-top:10px;"><strong>Suggested language:</strong> rose steadily · climbed sharply · plateaued · dipped briefly · peaked at · witnessed a marked increase</p>
+    </div>
+
+    <div class="exercise" data-ex="w3">
+      <div class="q">Describe the trend shown above in one sentence using academic Task 1 language.</div>
+      <input type="text" placeholder="Between 2000 and 2025..."><button onclick="manualCheck(this)">Submit</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <h3>Capstone — Mini Essay Planning</h3>
+  <div class="collapsible">
+    <div class="collapsible-header">Prompt: <em>"Some believe universities should only teach employable skills. To what extent do you agree?"</em> — See model plan <span class="chev">▶</span></div>
+    <div class="collapsible-body">
+      <p><strong>Thesis:</strong> While employability is a legitimate concern, universities must preserve their broader intellectual mission.</p>
+      <p><strong>Body 1:</strong> Acknowledge — graduates need marketable skills; rising tuition demands ROI.</p>
+      <p><strong>Body 2:</strong> Counter — critical thinking, research, and civic reasoning are equally employable <em>and</em> socially valuable; narrowing curricula risks producing technicians rather than thinkers.</p>
+      <p><strong>Conclusion:</strong> A balanced curriculum that integrates vocational relevance <em>with</em> liberal inquiry serves both graduates and society.</p>
+    </div>
+  </div>
+
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="writing">
+    <li>I can structure a Task 2 essay with clear thesis and topic sentences</li>
+    <li>I use a variety of cohesive devices beyond "and / but / also"</li>
+    <li>I can describe Task 1 trends with precise academic vocabulary</li>
+    <li>I maintain formal register throughout my writing</li>
+  </ul>
+</section>
+
+<!-- READING (brief) -->
+<section class="module" id="reading">
+  <span class="module-tag">Module 05</span>
+  <h2>IELTS Reading</h2>
+  <p class="lead">Speed, inference, and paraphrase recognition are the three pillars of a high reading score.</p>
+  <div class="card">
+    <h3>The Three-Pass Method</h3>
+    <div class="flow">
+      <div class="step"><strong>Pass 1</strong>Skim (2 min) — gist & topic sentences</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>Pass 2</strong>Scan — locate keywords</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>Pass 3</strong>Infer — read around the answer</div>
+    </div>
+    <div class="exercise" data-ex="r1">
+      <div class="q">Paraphrase recognition — <em>"Scientists have long maintained that sleep plays a vital role in memory."</em> Which option paraphrases this?</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">Sleep is not important for remembering things.</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">Researchers have consistently argued that sleep is essential for memory formation.</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">Scientists recently discovered sleep helps memory.</div>
+      <div class="feedback"></div>
+    </div>
+  </div>
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="reading">
+    <li>I skim for gist before answering any question</li>
+    <li>I recognise paraphrase rather than matching exact words</li>
+    <li>I can distinguish True / False / Not Given reliably</li>
+  </ul>
+</section>
+
+<!-- SPEAKING -->
+<section class="module" id="speaking">
+  <span class="module-tag">Module 06</span>
+  <h2>IELTS Speaking</h2>
+  <p class="lead">Fluency at C1 is not speed — it is <em>purposeful hesitation</em> managed with discourse markers.</p>
+  <div class="card">
+    <h3>Discourse Markers Toolkit</h3>
+    <p><span class="chip c1">That's an interesting question</span><span class="chip c1">I suppose</span><span class="chip c1">Having said that</span><span class="chip c1">To put it another way</span><span class="chip c1">What I mean is</span><span class="chip c1">Broadly speaking</span></p>
+  </div>
+  <h3>Mastery Checkpoint</h3>
+  <ul class="checklist" data-module="speaking">
+    <li>I use discourse markers to buy thinking time</li>
+    <li>I extend answers with reasons and examples</li>
+    <li>I vary intonation for emphasis</li>
+  </ul>
+</section>
+
+<!-- CAPSTONE -->
+<section class="module" id="capstone">
+  <span class="module-tag">Final Assessment</span>
+  <h2>Final C1 Challenge</h2>
+  <p class="lead">A comprehensive integration of everything learned. Aim for 80% accuracy to self-certify C1 readiness.</p>
+
+  <div class="card">
+    <h3>Part A — Grammar in Context</h3>
+    <div class="exercise" data-ex="c1">
+      <div class="q">Fill: <em>"____ had the minister finished his speech ____ the journalists began shouting."</em> (two blanks, comma-separated)</div>
+      <input type="text" placeholder="e.g., X, Y"><button onclick="checkText(this,['hardly, when','no sooner, than','barely, when'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="exercise" data-ex="c2">
+      <div class="q">Transform using inversion: <em>"The results were so surprising that they had to be verified twice."</em></div>
+      <input type="text" placeholder="So surprising..."><button onclick="checkText(this,['so surprising were the results that they had to be verified twice'])">Check</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Part B — Vocabulary in Context</h3>
+    <div class="exercise" data-ex="c3">
+      <div class="q">Choose the best word: <em>"The report ____ light on a previously overlooked phenomenon."</em></div>
+      <div class="mc-opt" onclick="checkMC(this,false)">put</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">shed</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">gave</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">threw</div>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Part C — Reading Inference</h3>
+    <p style="background:var(--bg-soft);padding:16px;border-radius:8px;font-style:italic;">Although remote work has been praised for its flexibility, emerging evidence suggests that the erosion of boundaries between professional and personal life may, in the long run, undermine the very productivity it was intended to enhance.</p>
+    <div class="exercise" data-ex="c4">
+      <div class="q">What does the author imply about remote work?</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">It is universally beneficial.</div>
+      <div class="mc-opt" onclick="checkMC(this,true)">Its long-term effects may contradict its intended purpose.</div>
+      <div class="mc-opt" onclick="checkMC(this,false)">It has no impact on productivity.</div>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Part D — Writing Task</h3>
+    <p><em>"Some people believe that international tourism does more harm than good. To what extent do you agree?"</em></p>
+    <p>Write your introductory paragraph below. Use at least one hedge, one cohesive device, and one advanced collocation.</p>
+    <div class="exercise" data-ex="c5">
+      <div class="q">Your introduction:</div>
+      <input type="text" placeholder="It is often argued..."><button onclick="manualCheck(this)">Submit</button>
+      <div class="feedback"></div>
+    </div>
+  </div>
+
+  <h3>Final Mastery Checklist</h3>
+  <ul class="checklist" data-module="final">
+    <li>I have completed all six modules</li>
+    <li>I score 80%+ on the final challenge</li>
+    <li>I can self-correct B2-typical errors in my own writing</li>
+    <li>I feel ready to attempt an IELTS mock test at band 7+</li>
+  </ul>
+
+  <div class="card" style="text-align:center;margin-top:30px;">
+    <h3 style="border:none;padding:0;">🎓 Well done</h3>
+    <p>You have completed the B2 → C1 journey. Revisit any module at any time — mastery is iterative.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<script>
+// Theme toggle
+const themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click', () => {
+  const cur = document.body.dataset.theme;
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.body.dataset.theme = next;
+  themeBtn.textContent = next === 'dark' ? '☀ Switch to Light Mode' : '🌙 Switch to Dark Mode';
+});
+
+// Collapsibles
+document.querySelectorAll('.collapsible-header').forEach(h => {
+  h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+});
+
+// Scroll progress
+const bar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  bar.style.width = pct + '%';
+});
+
+// Active nav + fade-in on scroll
+const modules = document.querySelectorAll('section.module');
+const navLinks = document.querySelectorAll('#navList a');
+const visited = new Set();
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      const id = e.target.id;
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`#navList a[href="#${id}"]`);
+      if (link) { link.classList.add('active'); link.classList.add('visited'); visited.add(id); }
+    }
+  });
+}, { threshold: 0.25 });
+modules.forEach(m => io.observe(m));
+
+// Checklists
+document.querySelectorAll('.checklist li').forEach(li => {
+  li.addEventListener('click', () => {
+    li.classList.toggle('done');
+    const list = li.closest('.checklist');
+    const all = list.querySelectorAll('li');
+    const done = list.querySelectorAll('li.done');
+    if (all.length === done.length) {
+      const mod = list.dataset.module;
+      const link = document.querySelector(`#navList a[href="#${mod}"]`);
+      if (link) link.classList.add('completed');
+    }
+  });
+});
+
+// Score tracking
+let score = 0;
+const scoreEl = document.getElementById('totalScore');
+function addScore(n) {
+  score += n;
+  scoreEl.textContent = score + ' pts';
+}
+
+// Text check
+function checkText(btn, answers) {
+  const input = btn.previousElementSibling;
+  const fb = btn.parentElement.querySelector('.feedback');
+  const val = input.value.trim().toLowerCase().replace(/\s+/g,' ');
+  const ok = answers.some(a => val === a.toLowerCase() || val.includes(a.toLowerCase().replace(/[.,]/g,'').trim()));
+  if (ok) {
+    fb.textContent = '✓ Correct — excellent control.';
+    fb.className = 'feedback good';
+    if (!btn.dataset.scored) { addScore(10); btn.dataset.scored = '1'; }
+  } else {
+    fb.innerHTML = '✗ Not quite. Model answer: <em>' + answers[0] + '</em>';
+    fb.className = 'feedback bad';
+  }
+}
+
+// Multiple choice
+function checkMC(el, correct) {
+  const fb = el.parentElement.querySelector('.feedback');
+  const opts = el.parentElement.querySelectorAll('.mc-opt');
+  opts.forEach(o => o.classList.remove('correct','wrong'));
+  if (correct) {
+    el.classList.add('correct');
+    fb.textContent = '✓ Correct.';
+    fb.className = 'feedback good';
+    if (!el.parentElement.dataset.scored) { addScore(10); el.parentElement.dataset.scored = '1'; }
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = '✗ Try again — consider the grammatical or collocational fit.';
+    fb.className = 'feedback bad';
+  }
+}
+
+// Manual (free-writing) — simple heuristic
+function manualCheck(btn) {
+  const input = btn.previousElementSibling;
+  const fb = btn.parentElement.querySelector('.feedback');
+  const words = input.value.trim().split(/\s+/).filter(Boolean).length;
+  if (words < 8) {
+    fb.textContent = '⚠ Too short — aim for at least 15–25 words with a hedge and a linker.';
+    fb.className = 'feedback bad';
+  } else {
+    fb.textContent = '✓ Recorded (' + words + ' words). Self-review: does it include a hedge, a linker, and a collocation?';
+    fb.className = 'feedback good';
+    if (!btn.dataset.scored) { addScore(10); btn.dataset.scored = '1'; }
+  }
+}
+</script>
+</body>
+</html>
